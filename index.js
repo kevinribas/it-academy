@@ -1,5 +1,6 @@
 const { exec } = require('child_process');
 const { Client, Events, GatewayIntentBits, Collection } = require('discord.js');
+const { sorteio } = require("./data/sorteioState.js");
 
 // dotenv
 const dotenv = require('dotenv');
