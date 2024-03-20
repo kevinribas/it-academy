@@ -6,7 +6,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 const { TOKEN, CLIENT_ID, GUILD_ID } = process.env;
 
-// cria o cliente e define permissões
+// Cria o cliente e define permissões
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds
@@ -14,7 +14,7 @@ const client = new Client({
 });
 client.commands = new Collection();
 
-// importa os comandos
+// Importa os comandos
 const fs = require('fs');
 const path = require('path');
 const commandsPath = path.join(__dirname, 'commands');
@@ -31,14 +31,6 @@ for (const file of commandFiles) {
 }
 
 
-
-client.on('messageCreate', (message) => {
-    if (message.author.bot) return;
-    if (message.content === 'ping') {
-        message.reply('pong');
-    }
-});
-
 client.once(Events.ClientReady, readyClient => {
     console.log(`${readyClient.user.tag} está online!`);
 });
@@ -48,5 +40,15 @@ client.login(TOKEN);
 // Listener de interações
 client.on(Events.InteractionCreate, async interaction => {
     if (!interaction.isChatInputCommand()) return;
-    console.log(interaction);
+    const command = interaction.client.commands.get(interaction.commandName);
+    if (!command) {
+        console.error(`Comando não encontrado.`);
+        return;
+    };
+    try {
+        await command.execute(interaction);
+    } catch (error) {
+        console.error(error);
+        await interaction.reply('Ocorreu um erro ao executar o comando.');
+    }
 });
