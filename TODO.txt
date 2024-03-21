@@ -1,3 +1,0 @@
-Implementar reports de erros faltantes;
-Fazer todos os testes;
-Fazer o readme.

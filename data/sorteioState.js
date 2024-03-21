@@ -7,7 +7,8 @@ let sorteio = {
     apostas: [],
     idApostaAtual: 1000,
     numerosSorteados: [], // Armazena os números que foram sorteados
-    vencedores: [] // Armazena as apostas vencedoras
+    vencedores: [], // Armazena as apostas vencedoras
+    rodadas: 0
 };
 
 function resetarSorteio() {
@@ -18,17 +19,14 @@ function resetarSorteio() {
     sorteio.idApostaAtual = 1000;
     sorteio.numerosSorteados = [];
     sorteio.vencedores = [];
+    sorteio.rodadas = 0;
 }
 
-function registrarJogador(nome, cpf) {
-    // Adiciona um novo jogador diretamente ao array 'jogadores'
-    sorteio.jogadores.push({ nome, cpf });
-}
-
-function registrarAposta(cpf, numeros) {
+function registrarAposta(nome, cpf, numeros) {
     // Cria e adiciona a nova aposta ao array 'apostas'
     sorteio.apostas.push({
         id: sorteio.idApostaAtual++,
+        nome,
         cpf,
         numeros
     });
@@ -36,25 +34,23 @@ function registrarAposta(cpf, numeros) {
     return true; // Registrado com sucesso
 }
 
-function jogadorExistePorCpf(cpf) {
-    // Verifica se o jogador já está registrado
-    return sorteio.jogadores.some(jogador => jogador.cpf === cpf);
-}
-
 function realizarSorteioEApuracao() {
     sorteio.ativo = false; // Finaliza o registro de novas apostas
 
     let rodada = 0;
     do {
-        // Sorteio de números
-        if (sorteio.numerosSorteados.length < 5 + rodada) {
+        sorteio.numerosSorteados = []; // Limpa os números sorteados anteriormente
+
+        do {
             const numeroSorteado = Math.floor(Math.random() * 50) + 1;
             if (!sorteio.numerosSorteados.includes(numeroSorteado)) {
                 sorteio.numerosSorteados.push(numeroSorteado);
             } else {
                 continue; // Se o número já foi sorteado, sorteia outro
             }
-        }
+        } while (sorteio.numerosSorteados.length < 5);
+
+        sorteio.numerosSorteados = [1,2,3,4,5]; // DEBUG, valores fixos para testes
 
         // Apuração de vencedores
         sorteio.vencedores = sorteio.apostas.filter(aposta =>
@@ -71,11 +67,14 @@ function realizarSorteioEApuracao() {
     };
 }
 
+function formatarCpf(cpf) {
+    return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+}
+
 module.exports = {
     sorteio,
     resetarSorteio,
-    registrarJogador,
     registrarAposta,
     realizarSorteioEApuracao,
-    jogadorExistePorCpf
+    formatarCpf,
 };
