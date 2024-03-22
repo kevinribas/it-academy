@@ -75,7 +75,7 @@ module.exports = {
             } else if (numeros.toLowerCase() === 'surpresinha'){
                 await interaction.reply({ content: `Surpresinha registrada com sucesso para ${nome} com CPF ${formatarCpf(cpf)}! \nNúmeros: ${numerosArray.join(', ')}`, ephemeral: false });
             } else {
-                await interaction.reply({ content: `Aposta registrada com sucesso para ${nome} com CPF $${formatarCpf(cpf)}! \nNúmeros: ${numerosArray.join(', ')}`, ephemeral: false });
+                await interaction.reply({ content: `Aposta registrada com sucesso para ${nome} com CPF ${formatarCpf(cpf)}! \nNúmeros: ${numerosArray.join(', ')}`, ephemeral: false });
             }
         } catch (error) {
             console.error('Erro ao executar o comando registrar-aposta:', error);

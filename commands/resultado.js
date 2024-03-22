@@ -3,7 +3,7 @@ const { sorteio } = require("../data/sorteioState.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('fim-apuracao')
+        .setName('resultado')
         .setDescription('Exibe os resultados finais após a apuração.'),
     async execute(interaction) {
         if (!interaction.isCommand()) return;
